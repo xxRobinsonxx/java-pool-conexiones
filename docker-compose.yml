@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-java-pool-conexiones
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - java-pool-conexiones-data:/var/lib/postgresql/data
+    networks:
+      - java-pool-conexiones-network
+
+  springboot:
+    build: .
+    container_name: springboot-java-pool-conexiones
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SERVER_PORT: ${SPRING_PORT}
+      CONTEXT_PATH: ${CONTEXT_PATH}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS}
+      LOG_LEVEL: ${LOG_LEVEL}
+      APP_LOG_LEVEL: ${APP_LOG_LEVEL}
+      UPLOAD_DIR: ${UPLOAD_DIR}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE}
+      TIMEZONE: ${TIMEZONE}
+    depends_on:
+      - postgres
+    networks:
+      - java-pool-conexiones-network
+
+volumes:
+  java-pool-conexiones-data:
+
+networks:
+  java-pool-conexiones-network:
+    driver: bridge
