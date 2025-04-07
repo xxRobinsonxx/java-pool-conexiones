@@ -4,6 +4,7 @@ services:
   postgres:
     image: postgres:15
     container_name: postgres-java-pool-conexiones
+    restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -17,6 +18,7 @@ services:
   springboot:
     build: .
     container_name: springboot-java-pool-conexiones
+    restart: always
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
